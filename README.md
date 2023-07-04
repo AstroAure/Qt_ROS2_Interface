@@ -8,6 +8,9 @@ A minimal ROS2 package for receiving and emitting Qt signals through a ROS2 Node
 
 The workings of the Qt-ROS2 interface is pretty logical in the ```interface.h```, ```interface.cpp``` and ```interface_node.cpp``` files but the main complexity lies in the ```CMakeLists.txt``` of the ```interface_node_demo``` package. Some explanations are provided as comments but it is recommanded to keep this base and only add dependencies and packages if needed.
 
+## Requirements
+Requires Qt5 and ROS2 to be installed
+
 ## Installation
 1. Download the folders in the src folder of a ROS2 workspace
 2. Build using ```colcon build``` from your workspace

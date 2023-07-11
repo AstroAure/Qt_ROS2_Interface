@@ -8,22 +8,39 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
+#include <interface_demo_messages/srv/discrete_cmd.hpp>
+#include <interface_demo_messages/srv/discrete_fdb.hpp>
 
 class ExternalROSNode : public rclcpp::Node {
+ public:
+  ExternalROSNode();
 
-  public:
-    ExternalROSNode();
+ private:
+  // Feedback topic (ex : /odometry)
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr continuousFdbSubscription_;
+  void ContinuousFdbTopicCallback(const std_msgs::msg::String& msg);
 
-  private:
+  // Command topic (ex : /cmd_vel)
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr continuousCmdPublisher_;
+  // Emulation of command publisher through timers
+  rclcpp::TimerBase::SharedPtr continuousCmdTimer_;
+  int continuousCmdCount_;
+  void ContinuousCmdTimerCallback();
 
-    void timer_callback();
-
-    void topic_callback(const std_msgs::msg::String& msg);
-
-    rclcpp::TimerBase::SharedPtr timer_;
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription_;
-    size_t count_;
+  // Feedback service (ex : /infos)
+  rclcpp::Client<interface_demo_messages::srv::DiscreteFdb>::SharedPtr discreteFdbClient_;
+  // Emulation of feedback call through timers
+  rclcpp::CallbackGroup::SharedPtr discreteFdbTimerCallbackGroup_;
+  rclcpp::TimerBase::SharedPtr discreteFdbTimer_;
+  void DiscreteFdbTimerCallback();
+  
+  // Command service (ex : /cmd_pos)
+  rclcpp::Client<interface_demo_messages::srv::DiscreteCmd>::SharedPtr discreteCmdClient_;
+  // Emulation of command call through timers
+  rclcpp::CallbackGroup::SharedPtr discreteCmdTimerCallbackGroup_;
+  rclcpp::TimerBase::SharedPtr discreteCmdTimer_;
+  int discreteCmdCount_;
+  void DiscreteCmdTimerCallback();
 
 };
 

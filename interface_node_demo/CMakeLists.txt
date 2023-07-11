@@ -5,6 +5,7 @@ project(interface_node_demo)
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(interface_demo_messages REQUIRED)
 find_package(Qt5 COMPONENTS Core REQUIRED)
 
 #Set the C++ standard to use
@@ -39,6 +40,7 @@ target_link_libraries(${PROJECT_NAME}
 ament_target_dependencies(${PROJECT_NAME}
     rclcpp
     std_msgs
+    interface_demo_messages
     Qt5
 )
 
@@ -46,17 +48,13 @@ ament_target_dependencies(${PROJECT_NAME}
 add_executable(external_ros nodes/external_ros_node.cpp)
 target_link_libraries(external_ros ${PROJECT_NAME})
 
-# Not used ! Requires to remove the interface executable and modifications in external_qt.h and external_qt.cpp. See external_qt_node.cpp
-# add_executable(external_qt nodes/external_qt_node.cpp)
-# target_link_libraries(external_qt ${PROJECT_NAME})
-
 #Creates the executable based on the main loop
 add_executable(interface nodes/interface_node.cpp)
 target_link_libraries(interface ${PROJECT_NAME})
 
 #Specifies installation rules
 install(
-    TARGETS ${PROJECT_NAME} external_ros interface #external_qt
+    TARGETS ${PROJECT_NAME} external_ros interface
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION lib/${PROJECT_NAME}
